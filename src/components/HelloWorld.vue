@@ -1,11 +1,11 @@
 <template>
   <div class="album py-5 bg-light">
     <div class="container">
-      <div class="row">
+      <div class="row mb-2">
         <div class="col-md-12">
           <div class="card mb-12 shadow-sm">
             <div class="card-body">
-              <form>
+              <form @submit.prevent="addNewToDos">
                 <div class="form-group">
                   <input
                     type="text"
@@ -22,10 +22,11 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-12">
-          <div v-for="(todo, index) in todos" :key="index" class="card mb-8 shadow-sm">
+        <div class="col-md-8">
+          <div v-for="(todo, index) in todos" :key="index" class="card mb-8 shadow-sm icon">
             <div class="card-body">
-              <h3>{{todo.content}}</h3>
+              <h3 :class="{ done: todo.done }" @click="addLineThrough(todo)">{{todo.content}}</h3>
+              <button type="button" @click="removeTodo(index)" class="btn btn-danger">Remove</button>
             </div>
           </div>
         </div>
@@ -35,23 +36,48 @@
 </template>
 
 <script>
+import { ref } from "vue";
+
 export default {
   name: "HelloWorld",
   setup() {
+    // declare data objects as refs
     const newToDo = ref("");
-    // const todos = ref([]);
+    const todos = ref([]);
+    // declare submit function
     function addNewToDos() {
       todos.value.push({
         id: Date.now(),
         done: false,
         content: newToDo.value,
       });
+      newToDo.value = "";
     }
+
+    function addLineThrough(todo) {
+      todo.done = !todo.done;
+    }
+
+    function removeTodo(index) {
+      todos.value.splice(index, 1);
+    }
+
     return {
       newToDo,
       todos,
       addNewToDos,
+      addLineThrough,
+      removeTodo,
     };
   },
 };
 </script>
+
+<style scoped>
+.done {
+  text-decoration: line-through;
+}
+.icon {
+  cursor: pointer;
+}
+</style>
