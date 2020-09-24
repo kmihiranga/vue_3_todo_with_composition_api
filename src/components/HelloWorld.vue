@@ -15,6 +15,12 @@
                     v-model="newToDo"
                   />
                 </div>
+
+                <button
+                  type="button"
+                  @click="markAllComplete"
+                  class="btn btn-default mr-2"
+                >Mark All Complete</button>
                 <button type="submit" class="btn btn-primary">ADD NEW TODO</button>
               </form>
             </div>
@@ -54,12 +60,19 @@ export default {
       newToDo.value = "";
     }
 
+    // add line through class
     function addLineThrough(todo) {
       todo.done = !todo.done;
     }
 
+    // remove todo
     function removeTodo(index) {
       todos.value.splice(index, 1);
+    }
+
+    // mark all as completed
+    function markAllComplete() {
+      todos.value.forEach((todo) => (todo.done = true));
     }
 
     return {
@@ -68,6 +81,7 @@ export default {
       addNewToDos,
       addLineThrough,
       removeTodo,
+      markAllComplete,
     };
   },
 };
